@@ -1,0 +1,179 @@
+{
+  "id": "winrm",
+  "name": "WinRM PowerShell",
+  "version": "0.1.0",
+  "description": "PowerShell sessions on Windows servers over WinRM, in a Termix terminal tab.",
+  "author": {
+    "name": "sNyteXx",
+    "url": "https://github.com/sNyteXx"
+  },
+  "license": "Apache-2.0",
+  "repository": "https://github.com/sNyteXx/termix-plugin-winrm",
+  "docs": "https://github.com/sNyteXx/termix-plugin-winrm/tree/main/docs",
+  "category": "Terminal",
+  "icon": "SquareTerminal",
+  "features": [
+    "A persistent PowerShell session per tab: variables and the current folder carry over",
+    "WinRM over HTTP with NTLM message encryption, or over HTTPS with certificate checks",
+    "Local and Active Directory accounts, with the host's saved Termix login",
+    "Jump host support through Termix's SSH pipeline",
+    "Errors, warnings, verbose and Write-Host output in PowerShell's own colours",
+    "Command history, multi-line input, Ctrl+C to stop a running command",
+    "Tabs, split screen and the terminal theme of the SSH terminal"
+  ],
+  "env": [],
+  "engine": {
+    "termix": ">=26.10.2",
+    "api": "^1.3"
+  },
+  "capabilities": [
+    "credentials:read",
+    "credentials:use",
+    "ssh:connect",
+    "network:serve",
+    "ui:surface"
+  ],
+  "contributes": {
+    "tabs": [
+      {
+        "id": "winrm",
+        "titleKey": "tab.title",
+        "icon": "SquareTerminal",
+        "openFrom": ["host-context-menu", "palette"]
+      }
+    ],
+    "protocols": [
+      {
+        "id": "winrm",
+        "credentialFields": [
+          {
+            "key": "domain"
+          }
+        ],
+        "defaultPort": 5985,
+        "hostLoginFallback": ["username", "password"]
+      }
+    ],
+    "permissions": [
+      {
+        "name": "sessions",
+        "titleKey": "permissions.sessions.title",
+        "descriptionKey": "permissions.sessions.description",
+        "defaultRoles": ["admin", "user"]
+      }
+    ],
+    "settings": {
+      "admin": [
+        {
+          "key": "maxSessionsPerUser",
+          "type": "number",
+          "labelKey": "settings.admin.maxSessionsPerUser.label",
+          "descriptionKey": "settings.admin.maxSessionsPerUser.description",
+          "min": 1,
+          "max": 50,
+          "default": 5
+        },
+        {
+          "key": "maxSessionsTotal",
+          "type": "number",
+          "labelKey": "settings.admin.maxSessionsTotal.label",
+          "descriptionKey": "settings.admin.maxSessionsTotal.description",
+          "min": 1,
+          "max": 500,
+          "default": 50
+        },
+        {
+          "key": "idleTimeoutMinutes",
+          "type": "number",
+          "labelKey": "settings.admin.idleTimeoutMinutes.label",
+          "descriptionKey": "settings.admin.idleTimeoutMinutes.description",
+          "min": 1,
+          "max": 1440,
+          "default": 30
+        }
+      ],
+      "host": {
+        "fields": [
+          {
+            "key": "enableWinrm",
+            "type": "boolean",
+            "labelKey": "settings.host.enableWinrm.label",
+            "default": false,
+            "hidden": true,
+            "defaultable": false
+          },
+          {
+            "key": "winrmPort",
+            "type": "number",
+            "labelKey": "settings.host.winrmPort.label",
+            "min": 1,
+            "max": 65535,
+            "default": 5985,
+            "hidden": true,
+            "defaultable": false
+          },
+          {
+            "key": "winrmTransport",
+            "type": "select",
+            "labelKey": "settings.host.winrmTransport.label",
+            "default": "http",
+            "hidden": true,
+            "options": [
+              {
+                "value": "http",
+                "labelKey": "settings.host.winrmTransport.http"
+              },
+              {
+                "value": "https",
+                "labelKey": "settings.host.winrmTransport.https"
+              }
+            ]
+          },
+          {
+            "key": "winrmTlsMode",
+            "type": "select",
+            "labelKey": "settings.host.winrmTlsMode.label",
+            "default": "ca",
+            "hidden": true,
+            "options": [
+              {
+                "value": "ca",
+                "labelKey": "settings.host.winrmTlsMode.ca"
+              },
+              {
+                "value": "fingerprint",
+                "labelKey": "settings.host.winrmTlsMode.fingerprint"
+              }
+            ]
+          },
+          {
+            "key": "winrmCaCert",
+            "type": "textarea",
+            "labelKey": "settings.host.winrmCaCert.label",
+            "default": "",
+            "hidden": true
+          },
+          {
+            "key": "winrmFingerprint",
+            "type": "string",
+            "labelKey": "settings.host.winrmFingerprint.label",
+            "default": "",
+            "hidden": true
+          },
+          {
+            "key": "winrmConnectTimeout",
+            "type": "number",
+            "labelKey": "settings.host.winrmConnectTimeout.label",
+            "min": 3,
+            "max": 120,
+            "default": 15,
+            "hidden": true
+          }
+        ]
+      }
+    },
+    "uses": ["terminal.resolveTheme"]
+  },
+  "locales": "locales",
+  "platforms": ["linux", "win32", "darwin"]
+}

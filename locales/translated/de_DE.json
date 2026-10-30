@@ -1,0 +1,90 @@
+{
+  "plugin": {
+    "name": "WinRM PowerShell",
+    "description": "PowerShell-Sitzungen auf Windows-Servern über WinRM, in einem Termix-Terminal-Tab."
+  },
+  "tab": {
+    "title": "PowerShell (WinRM)"
+  },
+  "palette": {
+    "connect": "PowerShell über WinRM öffnen"
+  },
+  "protocol": {
+    "title": "WinRM",
+    "description": "PowerShell-Remoting"
+  },
+  "permissions": {
+    "sessions": {
+      "title": "WinRM-Sitzungen öffnen",
+      "description": "PowerShell-Sitzungen über WinRM auf Hosts öffnen."
+    }
+  },
+  "terminal": {
+    "connecting": "PowerShell-Sitzung wird geöffnet",
+    "disconnected": "Die PowerShell-Sitzung wurde beendet",
+    "noServer": "Kein Server zum Verbinden.",
+    "connected": "Mit {{computer}} über WinRM verbunden (PowerShell {{version}}). Vollbild- und interaktive Konsolenprogramme werden nicht unterstützt."
+  },
+  "editor": {
+    "connection": "Verbindung",
+    "transport": "Transport",
+    "transportHttp": "HTTP (durch NTLM verschlüsselt)",
+    "transportHttps": "HTTPS (TLS)",
+    "port": "Port",
+    "connectTimeout": "Verbindungs-Timeout (s)",
+    "httpNote": "Jede Nachricht wird mit dem NTLM-Sitzungsschlüssel versiegelt, Befehle und Ausgaben sind also auch auf Port 5985 verschlüsselt. Antwortet der Server unverschlüsselt, wird die Verbindung abgelehnt. NTLM beweist nicht die Identität des Servers; wo das wichtig ist, HTTPS verwenden.",
+    "httpsNote": "TLS schützt die Verbindung, und die Anmeldung ist an das Serverzertifikat gebunden. Das Zertifikat wird immer geprüft.",
+    "certificate": "Serverzertifikat",
+    "tlsMode": "Prüfung",
+    "tlsModeCa": "Vertrauenswürdige CA (System oder unten)",
+    "tlsModeFingerprint": "Fester SHA-256-Fingerabdruck",
+    "caCert": "Eigenes CA-Zertifikat (PEM, optional)",
+    "caCertHint": "Für ein Zertifikat aus der eigenen CA, z. B. einer Active-Directory-Zertifikatsdienste-Root. Der Name muss zur Hostadresse passen.",
+    "fingerprint": "SHA-256-Fingerabdruck",
+    "fingerprintHint": "Für ein selbstsigniertes Zertifikat. Auf dem Server: (Get-ChildItem Cert:\\LocalMachine\\My\\<Thumbprint>).GetCertHashString('SHA256')",
+    "login": "Anmeldung",
+    "authDirect": "Benutzername und Passwort",
+    "authCredential": "Gespeicherte Zugangsdaten",
+    "credential": "Zugangsdaten",
+    "selectCredential": "Zugangsdaten wählen",
+    "username": "Benutzername",
+    "usernameHint": "Administrator, DOMÄNE\\benutzer oder benutzer@domaene.local",
+    "password": "Passwort",
+    "passwordSaved": "Gespeichert, zum Ersetzen tippen",
+    "domain": "Domäne",
+    "domainHint": "Die AD-Domäne oder bei lokalen Konten der Computername. Kann bei DOMÄNE\\benutzer leer bleiben."
+  },
+  "settings": {
+    "admin": {
+      "maxSessionsPerUser": {
+        "label": "Sitzungen pro Benutzer",
+        "description": "Wie viele WinRM-Sitzungen ein Benutzer gleichzeitig offen haben darf."
+      },
+      "maxSessionsTotal": {
+        "label": "Sitzungen insgesamt",
+        "description": "Wie viele WinRM-Sitzungen der Server gleichzeitig offen hält."
+      },
+      "idleTimeoutMinutes": {
+        "label": "Leerlauf-Timeout (Minuten)",
+        "description": "Eine Sitzung ohne Eingabe wird nach dieser Zeit geschlossen."
+      }
+    },
+    "host": {
+      "enableWinrm": { "label": "WinRM" },
+      "winrmPort": { "label": "WinRM-Port" },
+      "winrmTransport": {
+        "label": "WinRM-Transport",
+        "http": "HTTP (durch NTLM verschlüsselt)",
+        "https": "HTTPS"
+      },
+      "winrmTlsMode": {
+        "label": "Zertifikatsprüfung",
+        "ca": "Vertrauenswürdige CA",
+        "fingerprint": "Fester Fingerabdruck"
+      },
+      "winrmCaCert": { "label": "CA-Zertifikat" },
+      "winrmFingerprint": { "label": "Zertifikats-Fingerabdruck" },
+      "winrmConnectTimeout": { "label": "Verbindungs-Timeout" }
+    }
+  }
+}
