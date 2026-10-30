@@ -288,6 +288,13 @@ export class WinrmChannel {
         timeout,
       );
     } catch (error) {
+      if (error instanceof HttpError && error.code === "closed") {
+        // Through a jump host a closed port looks like this: the tunnel opens, then drops.
+        throw new WinrmError(
+          "connect",
+          `${this.target} closed the connection before answering. Is WinRM listening on this port, and does the firewall allow the Termix server or jump host?`,
+        );
+      }
       throw this.mapHttpError(error);
     }
     if (challenge.status !== 401) {
