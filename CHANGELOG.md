@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.0
+
+### Added
+
+- `POST /plugin-api/winrm/run`: runs a PowerShell script on a saved host and returns the output, errors, warnings, verbose and information streams as JSON, for MCP servers and other API clients
+- The `winrm.run` service, so other plugins (automations, fleets) can run scripts on Windows hosts over WinRM
+- The `winrm.run` permission, given to admins by default. Every run is audited with the script's sha256, never the script itself
+
+### Changed
+
+- The README explains installing from the sNyteXx registry
+
 ## 0.1.0
 
 ### Added

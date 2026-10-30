@@ -1,3 +1,4 @@
+import type { Router } from "express";
 import type { PluginContext } from "@termix-ssh/plugin-sdk/backend";
 import {
   channelsFor,
@@ -5,6 +6,8 @@ import {
   quickConnectTarget,
   resolveSavedTarget,
 } from "./connect.js";
+import { registerRoutes } from "./routes.js";
+import { runOnHost, validateRunInput } from "./run-api.js";
 import { SessionManager } from "./session/manager.js";
 import { PowerShellSession } from "./session/powershell-session.js";
 import {
@@ -74,7 +77,34 @@ export async function activate(ctx: PluginContext): Promise<void> {
     );
   });
 
-  ctx.log.info("WinRM terminal mounted at /plugin-ws/winrm/terminal");
+  const runDeps = {
+    ctx,
+    manager,
+    limits: async () => ({
+      perUser: await adminNumber(ctx, "maxSessionsPerUser", 5, 50),
+      total: await adminNumber(ctx, "maxSessionsTotal", 50, 500),
+    }),
+  };
+  registerRoutes(ctx.http.router<Router>(), runDeps);
+
+  // For other plugins (automations, fleets): the same as POST /run, as the calling user.
+  ctx.services.provide("winrm.run", {
+    run: async (
+      hostId: number,
+      script: string,
+      options: { timeoutSec?: number; width?: number } = {},
+    ) => {
+      const checked = validateRunInput({ hostId, script, ...options });
+      if ("error" in checked) throw new Error(checked.error);
+      const outcome = await runOnHost(runDeps, checked.input);
+      if ("result" in outcome) return outcome.result;
+      throw new Error(outcome.error);
+    },
+  });
+
+  ctx.log.info(
+    "WinRM terminal mounted at /plugin-ws/winrm/terminal, API at /plugin-api/winrm/run",
+  );
 }
 
 export async function deactivate(): Promise<void> {

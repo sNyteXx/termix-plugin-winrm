@@ -51,7 +51,9 @@ Keep this section current when the plugin changes.
   WS-Man), `src/backend/psrp` (fragments, messages, CLIXML, runspace pool, rendering),
   `src/backend/session` (console behaviour, WebSocket protocol, limits), `src/backend/connect.ts` (host
   resolution and jump hosts). Frontend: `line-editor.ts` (pure, tested), `WinrmTerminal.tsx` (xterm.js),
-  `HostEditorSection.tsx`.
+  `HostEditorSection.tsx`. Scripts as data: `src/backend/session/run-script.ts` (one fresh session per run),
+  `src/backend/run-api.ts` (permission `winrm.run`, limits, audit with the script hash only),
+  `src/backend/routes.ts` (`POST /run`) and the `winrm.run` service in `index.ts`.
 - Decisions: own TypeScript PSRP because no Node library does persistent sessions or HTTP message
   encryption; no PSHost (Read-Host etc. fail cleanly); output formatted on the server with
   `Out-String -Stream -Width`; two WinRM connections per session so Ctrl+C is not stuck behind a
@@ -62,3 +64,6 @@ Keep this section current when the plugin changes.
   itself; a Python socket cannot hold attributes (test oracle); WinRM's Receive timeout fault
   2150858793 is normal and means "poll again".
 - Target: Termix >= 26.10.2 (SDK 1.0.11, API 1.3). Do not use SDK APIs newer than API 1.3.
+- `tsconfig.json` turns `strict` on; the SDK preset has it off. Keep it on.
+- Route handlers must never throw for a remote problem: Termix turns a plugin off after five thrown
+  errors a minute. Send a status (502 for an unreachable host) instead.

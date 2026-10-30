@@ -1,7 +1,7 @@
 {
   "id": "winrm",
   "name": "WinRM PowerShell",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "PowerShell sessions on Windows servers over WinRM, in a Termix terminal tab.",
   "author": {
     "name": "sNyteXx",
@@ -14,6 +14,7 @@
   "icon": "SquareTerminal",
   "features": [
     "A persistent PowerShell session per tab: variables and the current folder carry over",
+    "An HTTP API and a winrm.run service that run a script on a host and return its output as data, for automations and MCP servers",
     "WinRM over HTTP with NTLM message encryption, or over HTTPS with certificate checks",
     "Local and Active Directory accounts, with the host's saved Termix login",
     "Jump host support through Termix's SSH pipeline",
@@ -32,6 +33,13 @@
     "ssh:connect",
     "network:serve",
     "ui:surface"
+  ],
+  "provides": [
+    {
+      "service": "winrm.run",
+      "version": "1.0.0",
+      "permission": "winrm.run"
+    }
   ],
   "contributes": {
     "tabs": [
@@ -60,6 +68,12 @@
         "titleKey": "permissions.sessions.title",
         "descriptionKey": "permissions.sessions.description",
         "defaultRoles": ["admin", "user"]
+      },
+      {
+        "name": "run",
+        "titleKey": "permissions.run.title",
+        "descriptionKey": "permissions.run.description",
+        "defaultRoles": ["admin"]
       }
     ],
     "settings": {

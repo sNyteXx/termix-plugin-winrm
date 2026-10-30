@@ -313,8 +313,9 @@ export function handleTerminalSocket(
       });
       touch();
       keepaliveTimer = setInterval(() => {
-        if (!backend || backend.busy || running || checking) return;
-        void asCaller(() => backend?.ping()).catch((error: unknown) =>
+        const current = backend;
+        if (!current || current.busy || running || checking) return;
+        void asCaller(() => current.ping()).catch((error: unknown) =>
           fail(error),
         );
       }, deps.keepaliveMs ?? 60_000);

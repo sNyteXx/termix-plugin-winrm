@@ -17,6 +17,10 @@
     "sessions": {
       "title": "WinRM-Sitzungen öffnen",
       "description": "PowerShell-Sitzungen über WinRM auf Hosts öffnen."
+    },
+    "run": {
+      "title": "WinRM-Skripte ausführen",
+      "description": "PowerShell-Skripte über die API und den Dienst winrm.run per WinRM auf Hosts ausführen, ohne Terminal. Jeder Lauf wird protokolliert."
     }
   },
   "terminal": {
@@ -70,8 +74,12 @@
       }
     },
     "host": {
-      "enableWinrm": { "label": "WinRM" },
-      "winrmPort": { "label": "WinRM-Port" },
+      "enableWinrm": {
+        "label": "WinRM"
+      },
+      "winrmPort": {
+        "label": "WinRM-Port"
+      },
       "winrmTransport": {
         "label": "WinRM-Transport",
         "http": "HTTP (durch NTLM verschlüsselt)",
@@ -82,9 +90,15 @@
         "ca": "Vertrauenswürdige CA",
         "fingerprint": "Fester Fingerabdruck"
       },
-      "winrmCaCert": { "label": "CA-Zertifikat" },
-      "winrmFingerprint": { "label": "Zertifikats-Fingerabdruck" },
-      "winrmConnectTimeout": { "label": "Verbindungs-Timeout" }
+      "winrmCaCert": {
+        "label": "CA-Zertifikat"
+      },
+      "winrmFingerprint": {
+        "label": "Zertifikats-Fingerabdruck"
+      },
+      "winrmConnectTimeout": {
+        "label": "Verbindungs-Timeout"
+      }
     }
   }
 }

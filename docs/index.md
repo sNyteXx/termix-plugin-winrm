@@ -73,6 +73,11 @@ PowerShell remoting has no terminal like SSH has. These need a console and do no
 - Tab completion is not available yet (Tab inserts spaces).
 - Kerberos is not supported, only NTLM. If your domain restricts NTLM, the plugin cannot sign in.
 
+## Scripts through the API
+
+Scripts can also run without a terminal, through `POST /plugin-api/winrm/run` or the `winrm.run` service, for
+MCP servers and automations. That needs the permission **Run WinRM scripts**. See [API and MCP](api.md).
+
 ## Admin settings
 
 Under the plugin's settings: how many sessions one user and the whole server may have open, and after how
