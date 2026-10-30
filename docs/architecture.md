@@ -164,5 +164,15 @@ There was no approved Windows test host, and the reachable AKL servers are produ
   pyspnego NTLM server replaying the recorded responses.
 - Session and terminal behaviour with a scripted PowerShell double.
 
-**Not yet verified against a live Windows host.** Kerberos, HTTPS with a real WinRM listener, and
-behaviour under real latency through a jump host are the first things to check on an approved test host.
+**Live test (October 2026):** a Windows 11 workstation (Windows PowerShell 5.1.26100), local account,
+WinRM over HTTP with NTLM message encryption, reached from a Termix 26.10.2 test instance through a
+Windows OpenSSH jump host. Checked: login and a refused wrong password (same answer as Windows' own
+WinRM client), persistent variables and location, `Get-Process`, `Get-WinEvent`, native programs
+(`ipconfig`, `whoami`), umlauts and emoji, warnings, `Write-Host` colours, non-terminating and
+terminating errors, multi-line input, Ctrl+C on a long `Start-Sleep` with the session usable afterwards,
+`Get-History`, three parallel sessions with separate state, shells deleted on the server on close, and
+about 150 ms per command through the jump host. The live test found and fixed one bug: after Ctrl+C the
+session used to end on the next command.
+
+Still open: Windows Server, domain accounts, HTTPS with a real listener and CA, and a WinRM service
+restart during a session.

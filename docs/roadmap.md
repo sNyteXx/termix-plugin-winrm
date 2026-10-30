@@ -9,9 +9,8 @@ Ordered by value and risk. Nothing here is implemented yet.
 
 ## Before production use
 
-1. **Live test on an approved Windows test host** (not a production SCADA system): HTTP + NTLM through
-   the jump host, HTTPS with a real listener and CA, wrong password, firewall closed, WinRM restart
-   during a session, long-running output, umlauts from native programs (`ipconfig`, `net user`).
+1. **Finish the live tests** (the first one passed on Windows 11, see the architecture page): Windows
+   Server with a domain account, HTTPS with a real listener and CA, a WinRM restart during a session.
 2. Install the `.tmxplug` on a Termix test instance of the same version as production (26.10.2) and
    check the host editor, Quick Connect, split view and theme.
 
