@@ -297,23 +297,28 @@ export class RunspacePool {
   }
 
   private async signal(commandId: string, code: string): Promise<void> {
-    await this.call(this.soap(ACTION.signal, signalBody(commandId, code)));
+    // A signal names a command: "invalid selectors" here means the command
+    // is already gone (Windows cleans up a stopped pipeline), not the shell.
+    await this.call(
+      this.soap(ACTION.signal, signalBody(commandId, code)),
+      false,
+    );
   }
 
   /** A control request; faults become WinrmErrors the session can act on. */
-  private async call(soap: string): Promise<string> {
+  private async call(soap: string, shellScoped = true): Promise<string> {
     const response = await this.options.control.send(soap, CONTROL_TIMEOUT_MS);
     try {
       checkFault(response);
     } catch (error) {
-      throw this.mapFault(error);
+      throw this.mapFault(error, shellScoped);
     }
     return response;
   }
 
-  private mapFault(error: unknown): unknown {
+  private mapFault(error: unknown, shellScoped = true): unknown {
     if (!(error instanceof WsManFault)) return error;
-    if (error.isShellGone) {
+    if (error.isShellGone && shellScoped) {
       this.state = RunspacePoolState.Broken;
       return new WinrmError(
         "shell-gone",
@@ -325,9 +330,10 @@ export class RunspacePool {
 
   /** Deletes the shell (best effort, bounded) and closes both channels. */
   async close(timeoutMs = 10_000): Promise<void> {
+    // Try to delete the shell in every state but "never created" and "already closed".
     const wasOpen =
-      this.state === RunspacePoolState.Opened ||
-      this.state === RunspacePoolState.Opening;
+      this.state !== RunspacePoolState.BeforeOpen &&
+      this.state !== RunspacePoolState.Closed;
     this.state = RunspacePoolState.Closed;
     try {
       if (wasOpen) {

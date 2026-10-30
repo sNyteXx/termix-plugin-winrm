@@ -158,6 +158,18 @@ describe("PowerShellSession", () => {
     expect(session.busy).toBe(false);
   });
 
+  it("keeps working after Ctrl+C, when Windows already dropped the stopped command", async () => {
+    const { session } = await open();
+    await run(session, "$service = 'Running'");
+    const handle = session.run("Start-Sleep 600", 120, () => undefined);
+    await new Promise((r) => setTimeout(r, 20));
+    await handle.stop();
+    expect((await handle.done).state).toBe("stopped");
+    expect(await session.prompt()).toContain("PS C:\\Users\\Administrator> ");
+    const { output } = await run(session, "$service");
+    expect(output).toBe("Running\r\n");
+  });
+
   it("deletes the shell on close", async () => {
     const { fake, session } = await open();
     await session.close();

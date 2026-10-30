@@ -58,6 +58,7 @@ export class FakePowerShell {
   location = "C:\\Users\\Administrator";
   deleted = false;
   shellGone = false;
+  private readonly stopped = new Set<string>();
   private readonly fragmenter = new Fragmenter();
   private poolQueue: Buffer[] = [];
   private readonly commands = new Map<
@@ -146,7 +147,12 @@ export class FakePowerShell {
       const code = /<rsp:Code>([^<]+)</.exec(soap)?.[1] ?? "";
       this.signals.push(code.split("/").pop() as string);
       const command = this.commands.get(commandId as string);
+      // Like Windows: a pipeline stopped with Ctrl+C is already cleaned up,
+      // so the Terminate that follows names an unknown command.
+      if (code.endsWith("Terminate") && this.stopped.has(commandId as string))
+        return GONE_FAULT;
       if (command && code.endsWith("crtl_c") && command.hang) {
+        this.stopped.add(commandId as string);
         command.hang = false;
         command.done = true;
         command.queue.push(
