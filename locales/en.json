@@ -1,0 +1,90 @@
+{
+  "plugin": {
+    "name": "WinRM PowerShell",
+    "description": "PowerShell sessions on Windows servers over WinRM, in a Termix terminal tab."
+  },
+  "tab": {
+    "title": "PowerShell (WinRM)"
+  },
+  "palette": {
+    "connect": "Open PowerShell over WinRM"
+  },
+  "protocol": {
+    "title": "WinRM",
+    "description": "PowerShell remoting"
+  },
+  "permissions": {
+    "sessions": {
+      "title": "Open WinRM sessions",
+      "description": "Open PowerShell sessions on hosts over WinRM."
+    }
+  },
+  "terminal": {
+    "connecting": "Opening PowerShell session",
+    "disconnected": "The PowerShell session ended",
+    "noServer": "No server to connect to.",
+    "connected": "Connected to {{computer}} over WinRM (PowerShell {{version}}). Full-screen and interactive console programs are not supported."
+  },
+  "editor": {
+    "connection": "Connection",
+    "transport": "Transport",
+    "transportHttp": "HTTP (encrypted by NTLM)",
+    "transportHttps": "HTTPS (TLS)",
+    "port": "Port",
+    "connectTimeout": "Connect timeout (s)",
+    "httpNote": "Every message is sealed with the NTLM session key, so commands and output are encrypted even on port 5985. The connection is refused if the server answers unencrypted. NTLM does not prove the server's identity; use HTTPS where that matters.",
+    "httpsNote": "TLS protects the connection and the login is bound to the server certificate. The certificate is always checked.",
+    "certificate": "Server certificate",
+    "tlsMode": "Check",
+    "tlsModeCa": "Trusted CA (system or below)",
+    "tlsModeFingerprint": "Pinned SHA-256 fingerprint",
+    "caCert": "Own CA certificate (PEM, optional)",
+    "caCertHint": "For a certificate from your own CA, such as an Active Directory Certificate Services root. The name must match the host address.",
+    "fingerprint": "SHA-256 fingerprint",
+    "fingerprintHint": "For a self-signed certificate. On the server: (Get-ChildItem Cert:\\LocalMachine\\My\\<thumbprint>).GetCertHashString('SHA256')",
+    "login": "Login",
+    "authDirect": "User name and password",
+    "authCredential": "Saved credential",
+    "credential": "Credential",
+    "selectCredential": "Choose a credential",
+    "username": "User name",
+    "usernameHint": "Administrator, DOMAIN\\user or user@domain.local",
+    "password": "Password",
+    "passwordSaved": "Saved, type to replace",
+    "domain": "Domain",
+    "domainHint": "The AD domain, or the computer name for a local account. Can stay empty with DOMAIN\\user."
+  },
+  "settings": {
+    "admin": {
+      "maxSessionsPerUser": {
+        "label": "Sessions per user",
+        "description": "How many WinRM sessions one user may have open at once."
+      },
+      "maxSessionsTotal": {
+        "label": "Sessions in total",
+        "description": "How many WinRM sessions the server keeps open at once."
+      },
+      "idleTimeoutMinutes": {
+        "label": "Idle timeout (minutes)",
+        "description": "A session with no input for this long is closed."
+      }
+    },
+    "host": {
+      "enableWinrm": { "label": "WinRM" },
+      "winrmPort": { "label": "WinRM port" },
+      "winrmTransport": {
+        "label": "WinRM transport",
+        "http": "HTTP (encrypted by NTLM)",
+        "https": "HTTPS"
+      },
+      "winrmTlsMode": {
+        "label": "Certificate check",
+        "ca": "Trusted CA",
+        "fingerprint": "Pinned fingerprint"
+      },
+      "winrmCaCert": { "label": "CA certificate" },
+      "winrmFingerprint": { "label": "Certificate fingerprint" },
+      "winrmConnectTimeout": { "label": "Connect timeout" }
+    }
+  }
+}
